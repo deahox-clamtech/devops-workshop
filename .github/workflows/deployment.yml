@@ -23,3 +23,16 @@ jobs:
         with:
           push: true
           tags: deahox/starlabs-devops:latest
+  cd:
+    needs: ci
+    runs-on: self-hosted
+    steps:
+      -
+        name: Pull image
+        run: docker pull deahox/starlabs-devops:latest
+
+      - 
+        name: Stop & redeploy
+        run: |
+           docker stop $( docker ps -q )
+           docker run -d -p 3000:3000 deahox/starlabs-devops:latest
